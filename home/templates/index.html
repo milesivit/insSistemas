@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %} Home {% endblock %}
+
+{% block content %}
+    <div class="jumbotron">
+        <h1 class="display-4">Welcome!</h1>
+        <p class="lead">This is a simple project with Django, my first actually, I hope you like it, mile :).</p>
+        <hr class="my-4">
+        {% if not user.is_authenticated %}
+            <p>Register to use all features.</p>
+            <p class="lead">
+                <a class="btn btn-primary btn-lg" href="{% url 'login' %}" role="button">Sign in</a>
+            </p>
+            <p class="lead">
+                <a class="btn btn-primary btn-lg" href="{% url 'register' %}" role="button">Sign up</a>
+            </p>
+        {% endif %}
+    </div>
+{% endblock %}
