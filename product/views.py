@@ -6,6 +6,8 @@ from product.services.products import ProductService
 from product.services.customers import CustomerService
 from product.services.orders import OrderService
 
+from django.shortcuts import render, redirect
+
 
 # Create your views here.
 def product_list(request):
@@ -18,6 +20,21 @@ def product_list(request):
             products= all_products,
         )
     )
+
+def create_product(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        description = request.POST.get('description')
+        price = float(request.POST.get('price'))
+        stock = int(request.POST.get('stock'))
+
+        product = ProductService.create(name, description, price, stock)
+        return redirect('product_list') 
+
+    return render(request, 'products/create_product.html')
+
+    
+
 
 def product_detail(request, product_id):
     product = get_object_or_404(Product, id= product_id)

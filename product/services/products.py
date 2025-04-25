@@ -11,10 +11,25 @@ class ProductService:
     def get_all(self) -> list[Product]:
         return self.product_repository.get_all()
     """
-    
+
     @staticmethod
     def get_all():
         return ProductRepository.get_all()
+    
+    @staticmethod
+    def create(
+        name: str,
+        description: str,
+        price: float,
+        stock: int,
+    ) -> bool:
+        product = ProductRepository.create(
+            name=name,
+            price=price,
+            description=description,
+            stock=stock
+        )
+        
     
     @staticmethod
     def delete(product_id: int) -> bool:

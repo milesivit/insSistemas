@@ -1,7 +1,8 @@
 from django.urls import path
 
 from product.views import (
-    customer_list, 
+    customer_list,
+    create_product, 
     order_list, 
     product_list, 
     product_detail
@@ -27,5 +28,10 @@ urlpatterns = [
         route='customer_list/', 
         view=customer_list, 
         name='customer_list'
+    ),
+    path(
+        route='create_product/', 
+        view=create_product, 
+        name='create_product'
     )
 ]
