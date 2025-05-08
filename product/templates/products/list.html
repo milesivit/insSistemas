@@ -19,6 +19,7 @@
                         <td>{{product.price}}</td>
                         <td>{{product.stock}}</td>
                         <td> <a href="{% url 'product_detail' product.id %}" class="fa fa-eye" aria-hidden="true">Ver</a></td>
+                        <td> <a href="{% url 'product_delete' product.id %}" class="fa fa-trash" aria-hidden="true">Delete</a></td>
                 </tr>
                 {% endfor %}
                 <tr>

@@ -2,22 +2,29 @@ from django.urls import path
 
 from product.views import (
     customer_list,
-    create_product, 
     order_list, 
-    product_list, 
-    product_detail
+    ProductList,
+    ProductDetail,
+    ProductDelete,
+    ProductCreateView,
+    ProductCreateViewV2
 )
 
 urlpatterns = [
     path(
         route='product_list/', 
-        view=product_list, 
+        view=ProductList.as_view(), 
         name='product_list'
     ),
     path(
         route='product_detail/<int:product_id>/',
-        view=product_detail,
+        view=ProductDetail.as_view(),
         name='product_detail'
+    ),
+    path(
+        route='product_delete/<int:product_id>/',
+        view=ProductDelete.as_view(),
+        name='product_delete'
     ),
     path(
         route='order_list/', 
@@ -31,7 +38,7 @@ urlpatterns = [
     ),
     path(
         route='create_product/', 
-        view=create_product, 
+        view=ProductCreateViewV2.as_view(), 
         name='create_product'
     )
 ]
