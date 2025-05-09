@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 
 from product.models import Product
+from product.forms import ProductForm
 
 from product.services.products import ProductService
 from product.services.customers import CustomerService
@@ -117,11 +118,16 @@ class ProductCreateView(View):
 
 #nuevo create v2 cortito
 class ProductCreateViewV2(CreateView):
-    model = Product
+    form_class = ProductForm
     template_name = 'products/create_from_class.html'
     success_url = reverse_lazy('product_list')
-    fields = ['name', 'price', 'stock']
 
+    def get_context_data(self, **kwargs):
+        context= super().get_context_data(**kwargs)
+        context['creador_de_productos'] = 'Creador de productos'
+        print(context)
+        return(context)
+    
     def form_valid(self, form):
         messages.success(self.request, "Product created")
         return super().form_valid(form)

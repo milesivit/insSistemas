@@ -3,7 +3,7 @@
 {% block title %} Create Product {% endblock %}
 
 {% block content %} 
-    <h2>create new product</h2>
+    <h2>{{creador_de_productos}}</h2>
     <form method="post">
         {% csrf_token %}
         {{ form.as_table}}
