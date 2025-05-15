@@ -2,64 +2,75 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.shortcuts import render, redirect
+from django.views import View
+from home.forms import LoginForm, RegisterForm
 
-# Create your views here.
-def register_view(request):
-    if request.method == 'POST':
-        data = request.POST
-        username = data.get('username')
-        pass1= data.get('password1')
-        pass2= data.get('password2')
-        email= data.get('email')
-        print(username, pass1, pass2)
+class HomeView(View):
+    def get(self, request):
+        return render(request, 'index.html')
+    
+class LogoutView(View):
+    def get(self, request):
+        logout(request)
+        return redirect('login')
 
-        if not username or not pass1 or not pass2:
-            messages.error(request, "no data")
-        
-        elif pass1 != pass2:
-            messages.error(request, "Passwords dont match")
-        
-        elif User.objects.filter(username=username).exists():
-            messages.error(request, "the user is in use")
-        
-        else:
-            user = User.objects.create_user(
-                username=username,
-                password=pass1,
-                email=email
+class Registerview(View):
+    def get(self, request):
+        form = RegisterForm()
+        return render(
+            request,
+            'accounts/register.html',
+            {"form": form}
+        )
+    
+    def post(self, request):
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            User.objects.create_user(
+                username=form.cleaned_data["username"],
+                password=form.cleaned_data['password1'],
+                email=form.cleaned_data['email']
             )
-            login(request, user)  #loguea automáticamente
-            messages.success(request, "Registration successful")
-            return redirect('index')  #redirige a la home
-        
-
-    return render(
-        request=request,
-        template_name='accounts/register.html'
+            messages.success(
+                request,
+                "Successfully registered user"
+            )
+        return render(
+            request,
+            'accounts/register.html',
+            {"form" : form }
+        )
+    
+class LoginView(View):
+    def get(self, request):
+        form = LoginForm()
+        return render(
+            request,
+            'accounts/login.html',
+            {"form": form}
         )
 
-def login_view(request):
-    if request.method == 'POST':
-        username = request.POST.get("username")
-        password = request.POST.get("password")
+    def post(self, request):
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
 
-        user = authenticate(
+            user = authenticate(
+                request, 
+                username=username, 
+                password=password
+            )
+
+            if user is not None: 
+                login(request, user)
+                messages.success(request, "Session started")
+                return redirect("index")
+            else:
+                messages.error(request, "The username or password does not match")
+                
+        return render(
             request, 
-            username=username,
-            password=password
-        )
-        if user is not None: #verifica si el usuario esta bien logueado
-            login(request, user)
-            messages.success(request, 'sesion success')
-            return redirect('index')
-        else:
-            messages.error(request, 'user or password invalid')
-        
-    return render(request, "accounts/login.html")
-
-def logout_view(request):
-    logout(request)
-    return redirect('login')
-
-def home_view(request):
-    return render(request, 'index.html')
+            "accounts/login.html", 
+            {'form': form}
+        ) 
