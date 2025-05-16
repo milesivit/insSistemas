@@ -1,6 +1,6 @@
 from django import forms
 
-from product.models import Product
+from product.models import Product, Order, OrderDetail
 
 class ProductForm(forms.ModelForm):
     class Meta:
@@ -29,3 +29,15 @@ class ProductForm(forms.ModelForm):
                 }
             ),
         }
+
+class OrderForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ['customer']
+
+class OrderDetailForm(forms.ModelForm):
+    class Meta:
+        model = OrderDetail
+        fields = ['order', 'product', 'quantity']
+
+        
