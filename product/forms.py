@@ -38,6 +38,16 @@ class OrderForm(forms.ModelForm):
 class OrderDetailForm(forms.ModelForm):
     class Meta:
         model = OrderDetail
-        fields = ['order', 'product', 'quantity']
+        fields = ['order','product', 'quantity']
+
+        widgets = {
+            'order': forms.HiddenInput(),
+            'product': forms.Select(
+                attrs={'class': 'form-control w-50'}
+            ),
+            'quantity': forms.NumberInput(
+                attrs={'class': 'form-control w-25'}
+            )
+        }
 
         

@@ -1,14 +1,17 @@
-{% extends 'base.html' %} 
-{% block title %} Order List {% endblock %}
+{% extends 'base.html' %}
 
-{% block content %} 
-<h2>hacer que cuando aprete un order vaya directo al order detail de ese customer</h2>
-        {% for order in orders %}
-            <li>Order # {{order.id}} - Customer {{order.customer.name}}</li>
-        {% empty %}
-            <li>Empty orders</li>
-        {% endfor %}
+{% block title %} Orders List {% endblock %}
 
-        <a href="{% url 'order_create' %}">Order create</a>
+{% block content %}
+    {% for order in orders %}
+        <li>
+            <a href="{% url 'order_detail' order.id%}">
+                Order # {{order.id}} - Customer {{order.customer.name}} 
+            </a>
+        </li>
+    {% empty %}
+        <li> Empty Orders</li>  
+    {% endfor %}
+
+    <a href="{% url 'order_create' %}"> Crear nueva orden </a>
 {% endblock %}
- 

@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 
-from product.models import Product, OrderDetail
+from product.models import Product, OrderDetail, Order
 from product.forms import ProductForm,OrderForm,OrderDetailForm
 
 from product.services.products import ProductService
@@ -97,12 +97,49 @@ class ProductCreateViewV2(CreateView):
         messages.success(self.request, "Product created")
         return super().form_valid(form)
     
-class OrderCreateView(CreateView):
+class OrderList(ListView):
+    model = Order
+    template_name = 'orders/list.html'
+    context_object_name = 'orders'
+
+class OrderCreate(CreateView):
+    model = Order
     form_class = OrderForm
     template_name = 'orders/create.html'
     success_url = reverse_lazy('order_create')
 
-class OrderDetailView(CreateView):
+class OrderDetailCreate(CreateView):
     form_class = OrderDetailForm
-    template_name = 'order_detail/create.html'
-    success_url = reverse_lazy('order_detail_create')
+    template_name = 'orders_detail/create.html'
+    success_url = None
+
+    def get_initial(self):
+        # Devuelve valores precargados al formulario
+        order_id = self.kwargs.get('order_id')
+        return {'order': order_id} # order es el atributo de OrderDetailForm
+    
+    def get_success_url(self):
+        # Esto hace que se quede en la misma pagina luego del exito de la llamada
+        return reverse_lazy(
+            'order_detail',
+            kwargs={
+                'order_id': self.kwargs.get('order_id')
+            }
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        order = get_object_or_404(Order, id=self.kwargs['order_id'])
+        details = order.details.all()
+        context['order'] = order
+        details = [
+            {
+                "product": detail.product,
+                "quantity": detail.quantity,
+                "subtotal": detail.quantity * detail.product.price
+            }
+            for detail in details
+        ]
+        context['details'] = details
+        context['total'] = sum(detail['subtotal'] for detail in details)
+        return context

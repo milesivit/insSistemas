@@ -3,14 +3,13 @@ from django.urls import path
 from product.views import (
     customer_list,
     order_list, 
-    OrderCreateView,
     ProductList,
     ProductDetail,
     ProductDelete,
-    ProductCreateView,
+    OrderDetailCreate,
     ProductCreateViewV2,
-    OrderDetailView,
-    OrderDetailList
+    OrderList,
+    OrderCreate
 )
 
 urlpatterns = [
@@ -45,18 +44,18 @@ urlpatterns = [
         name='create_product'
     ),
     path(
+        route='order_list/', 
+        view=OrderList.as_view(), 
+        name='order_list'
+    ),
+    path(
         route='order_create/', 
-        view=OrderCreateView.as_view(), 
+        view=OrderCreate.as_view(), 
         name='order_create'
     ),
     path(
-        route='order_detail_create/', 
-        view=OrderDetailView.as_view(), 
-        name='order_detail_create'
+        route='order/<int:order_id>/detail/', 
+        view=OrderDetailCreate.as_view(), 
+        name='order_detail'
     ),
-    path(
-        route='order_detail_list/', 
-        view=OrderDetailList.as_view(), 
-        name='order_detail_list'
-    )
 ]
