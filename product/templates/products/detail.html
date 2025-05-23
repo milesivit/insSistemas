@@ -8,6 +8,12 @@
         <li>
             Price: {{ product.price }}
             Stock: {{ product.stock }}
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="">
+            {% else %}
+                <p>no hay pato</p>
+            {% endif %}
+
         </li>
     </ul>
     <a href="{% url 'product_list' %}" >Volver a la lista</a>
