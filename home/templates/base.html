@@ -1,4 +1,6 @@
 {% load static %}
+{% load i18n %}
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -19,7 +21,7 @@
            
             {% if user.is_authenticated %}
               <li>
-                  <a href="{% url 'product_list' %}">Products</a>
+                  <a href="{% url 'product_list' %}">{% trans 'Products' %}</a>
               </li>
               <li>
                   <a href="{% url 'order_list' %}">Orders</a>

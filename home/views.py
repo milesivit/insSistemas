@@ -5,6 +5,9 @@ from django.shortcuts import render, redirect
 from django.views import View
 from home.forms import LoginForm, RegisterForm
 
+# Traduccion
+from django.utils.translation import activate, get_language, deactivate
+
 class HomeView(View):
     def get(self, request):
         return render(request, 'index.html')
